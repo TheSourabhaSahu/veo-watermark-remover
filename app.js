@@ -177,14 +177,18 @@
 
     try {
       if (!state.def.alpha) {
-        const response = await fetch("veo-bg-alpha.png");
-        const blob = await response.blob();
-        const alphaImg = await VeoEngine.loadImageData(blob);
-        const alpha = new Float32Array(alphaImg.width * alphaImg.height);
-        for (let i = 0; i < alpha.length; i++) {
-          alpha[i] = alphaImg.data[i * 4] / 255;
+        try {
+          const response = await fetch("veo-bg-alpha.png");
+          if (!response.ok) throw new Error("Fetch failed");
+          const blob = await response.blob();
+          await loadAlphaFromBlob(blob);
+        } catch (fetchErr) {
+          console.warn("Auto-load failed, showing manual upload UI", fetchErr);
+          $("manual-alpha-container").hidden = false;
+          setStatus(defStatus, "Browser blocked auto-load. Please select 'veo-bg-alpha.png' manually.", "error");
+          defProcessBtn.disabled = false;
+          return; // Stop here until manual upload
         }
-        state.def.alpha = alpha;
       }
 
       if (state.def.videoFile) {
@@ -196,6 +200,26 @@
       setStatus(defStatus, `Error: ${err.message}`, "error");
     } finally {
       defProcessBtn.disabled = false;
+    }
+  });
+
+  async function loadAlphaFromBlob(blob) {
+    const alphaImg = await VeoEngine.loadImageData(blob);
+    const alpha = new Float32Array(alphaImg.width * alphaImg.height);
+    for (let i = 0; i < alpha.length; i++) {
+      alpha[i] = alphaImg.data[i * 4] / 255;
+    }
+    state.def.alpha = alpha;
+    $("manual-alpha-container").hidden = true;
+    return alpha;
+  }
+
+  // Manual Alpha Upload
+  $("manual-alpha-btn").addEventListener("click", () => $("manual-alpha-input").click());
+  $("manual-alpha-input").addEventListener("change", async (e) => {
+    if (e.target.files.length > 0) {
+      await loadAlphaFromBlob(e.target.files[0]);
+      setStatus(defStatus, "Overlay loaded manually ✓ — Ready to process");
     }
   });
 

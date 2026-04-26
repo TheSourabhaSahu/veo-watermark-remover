@@ -35,6 +35,14 @@
             </div>
             <p class="settings-note">These parameters are tuned for the standard Veo watermark.</p>
             
+            <div id="manual-alpha-container" style="margin-top: 1rem;" hidden>
+              <button class="btn" id="manual-alpha-btn" style="width: 100%; padding: 0.5rem; font-size: 0.8rem; background: var(--bg-input); border: 1px solid var(--accent);">
+                Load Manual Overlay (.png)
+              </button>
+              <input type="file" id="manual-alpha-input" accept="image/png" hidden />
+              <p class="settings-note" style="color: var(--accent);">Required if opening without a server.</p>
+            </div>
+
             <h3 class="settings-title" style="margin-top:1.5rem;">Edge Cleanup</h3>
             <div class="field">
               <label for="def-edge-radius">Radius</label>

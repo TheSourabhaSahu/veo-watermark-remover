@@ -35,12 +35,28 @@ Where:
 - **Pre-calibrated Overlay**: Uses the standard Veo alpha map for instant results.
 - **Edge Cleanup**: Adjustable radius and strength parameters to smooth the recovered area.
 
+## Running the Tool
+
+### Option 1: Using a Local Server (Recommended)
+Due to browser security (CORS), the "Default Overlay" map cannot be loaded automatically if you just double-click the `index.html` file. Running a small local server is the best way to use the tool:
+
+*   **Node.js**: Run `npx serve .` inside the folder.
+*   **VS Code**: Use the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension.
+*   **Python**: Run `python -m http.server 8000`.
+
+### Option 2: Opening Directly (`file://`)
+If you open `index.html` directly without a server:
+1.  The tool will alert you that it couldn't load the default overlay.
+2.  Simply click the **"Load Manual Overlay"** button (or use the All Frames tab) and select the `veo-bg-alpha.png` file from this folder.
+3.  The tool will then work normally for the rest of your session.
+
 ## Quick Start
 
-1. Open `index.html` in any modern browser (use a local server like `npx serve` for best results).
-2. Upload your video file or individual frames.
-3. Adjust the **Edge Cleanup** settings if needed.
-4. Click **Process & Export** and download the results.
+1.  Start your local server or open `index.html`.
+2.  Upload your video file (MP4/WebM) or a set of image frames.
+3.  Adjust the **Edge Cleanup** settings (Radius: 3, Strength: 0.68 is usually best).
+4.  Click **Process & Export**.
+5.  Wait for the progress bar to hit 100% and click **Download**.
 
 ## File Structure
 
